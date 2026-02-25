@@ -1,6 +1,7 @@
 {
   "name": "webinit",
   "displayName": "WebInit",
+  "publisher": "RaviKumar",
   "description": "Create a basic HTML, CSS, JS project structure instantly.",
   "version": "0.0.1",
   "engines": {
