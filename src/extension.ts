@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 </head>
 <body>
 
-<h1>Thanks for using WebInit 🚀</h1>
+<h1>Thanks for using WebInit :) </h1>
 
 <script src="script.js"></script>
 </body>
