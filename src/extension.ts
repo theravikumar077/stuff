@@ -52,14 +52,17 @@ export function activate(context: vscode.ExtensionContext) {
             // style.css
             fs.writeFileSync(
                 path.join(projectPath, 'style.css'),
-`* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+`*{
+margin: 0;
+padding:0;
+box-sizing: border-box;
+font-family: Helvetica , sans-serif;
 }
-
+    
+html,
 body {
-  font-family: Arial, sans-serif;
+width: 100%;
+height: 100%;
 }`
             );
 
