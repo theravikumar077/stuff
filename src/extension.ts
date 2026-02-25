@@ -69,9 +69,10 @@ height: 100%;
             // script.js
             fs.writeFileSync(
                 path.join(projectPath, 'script.js'),
-`console.log("${projectName} started 🚀");`
+`console.log("${projectName} started 🚀");
+alert("JS is working");`
             );
-
+            
             vscode.window.showInformationMessage("WebInit project created successfully!");
         }
     );
