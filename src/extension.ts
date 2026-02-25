@@ -1,26 +1,79 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "web-project-starter" is now active!');
+    const disposable = vscode.commands.registerCommand(
+        'webinit.start',
+        async () => {
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('web-project-starter.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from web-project-starter!');
-	});
+            const projectName = await vscode.window.showInputBox({
+                prompt: "Enter your project name"
+            });
 
-	context.subscriptions.push(disposable);
+            if (!projectName) return;
+
+            const workspaceFolders = vscode.workspace.workspaceFolders;
+            if (!workspaceFolders) {
+                vscode.window.showErrorMessage("Please open a folder first.");
+                return;
+            }
+
+            const rootPath = workspaceFolders[0].uri.fsPath;
+            const projectPath = path.join(rootPath, projectName);
+
+            // Create main folder
+            fs.mkdirSync(projectPath, { recursive: true });
+
+            // Create assets/images
+            fs.mkdirSync(path.join(projectPath, 'assets', 'images'), { recursive: true });
+
+            // index.html
+            fs.writeFileSync(
+                path.join(projectPath, 'index.html'),
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${projectName}</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Thanks for using WebInit 🚀</h1>
+
+<script src="script.js"></script>
+</body>
+</html>`
+            );
+
+            // style.css
+            fs.writeFileSync(
+                path.join(projectPath, 'style.css'),
+`* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-// This method is called when your extension is deactivated
+body {
+  font-family: Arial, sans-serif;
+}`
+            );
+
+            // script.js
+            fs.writeFileSync(
+                path.join(projectPath, 'script.js'),
+`console.log("${projectName} started 🚀");`
+            );
+
+            vscode.window.showInformationMessage("WebInit project created successfully!");
+        }
+    );
+
+    context.subscriptions.push(disposable);
+}
+
 export function deactivate() {}

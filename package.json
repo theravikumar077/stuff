@@ -1,7 +1,7 @@
 {
-  "name": "web-project-starter",
-  "displayName": "web-project-starter",
-  "description": "Creates basic HTML CSS JS project structure",
+  "name": "webinit",
+  "displayName": "WebInit",
+  "description": "Create a basic HTML, CSS, JS project structure instantly.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.109.0"
@@ -9,13 +9,15 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:webinit.start"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "web-project-starter.helloWorld",
-        "title": "Hello World"
+        "command": "webinit.start",
+        "title": "Web Init"
       }
     ]
   },
