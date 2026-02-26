@@ -1,12 +1,56 @@
-ravik@hp MINGW64 /d/Extension/web-project-starter (main)
-$ vsce package
-Executing prepublish script 'npm run vscode:prepublish'...
+# WebInit 🚀
 
-> web-project-starter@0.0.1 vscode:prepublish
-> npm run compile
+WebInit is a lightweight Visual Studio Code extension that instantly generates a clean and ready-to-use HTML, CSS, and JavaScript project structure with a single command.
 
+Stop wasting time creating folders and linking files manually.
 
-> web-project-starter@0.0.1 compile
-> tsc -p ./
+Just type **Web Init** → Enter project name → Start coding.
 
- ERROR  It seems the README.md still contains template text. Make sure to edit the README.md file before you package or publish your extension.
+---
+
+## ✨ Features
+
+- Creates complete project folder automatically
+- Generates:
+  - index.html
+  - style.css
+  - script.js
+  - assets/images folder
+- Automatically links CSS and JavaScript files
+- Minimal, fast, and beginner-friendly
+- No configuration required
+
+---
+
+## 📁 Generated Structure
+
+project-name/
+- index.html
+- style.css
+- script.js
+- assets/
+  - images/
+
+---
+
+## 🚀 How to Use
+
+1. Open any folder in VS Code
+2. Press `Ctrl + Shift + P`
+3. Type **Web Init**
+4. Enter your project name
+5. Your project is ready
+
+---
+
+## 🎯 Who Is It For?
+
+- Web development beginners
+- Students
+- Coding bootcamp learners
+- Rapid prototyping
+- Developers who want quick setup
+
+---
+
+Built with ❤️ by Ravi Kumar   ye mera project hai iske liye ek mast ka logo banao jo mai apne etension k liye use kar saku mast banana bhai
