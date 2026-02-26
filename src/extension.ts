@@ -1,6 +1,11 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import { generateVanilla } from './generators/vanilla';
+import { generateReact } from './generators/react';
+import { generateNode } from './generators/node';
+import { generateNext } from './generators/next';
+import { generateTailwind } from './generators/tailwind';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -22,60 +27,61 @@ export function activate(context: vscode.ExtensionContext) {
 
             const rootPath = workspaceFolders[0].uri.fsPath;
             const projectPath = path.join(rootPath, projectName);
+// Step 2: Library selection
+        const libraryItems: vscode.QuickPickItem[] = [
+            { label: '📄 Vanilla JS', description: 'Basic HTML/CSS/JS (your current setup)' },
+            { label: '⚛️ React + Vite', description: 'React 18 + Vite + TypeScript' },
+            { label: '🚀 Next.js', description: 'Next.js 15 + TypeScript' },
+            { label: '🐳 Node.js + Express', description: 'Node.js backend project' },
+            { label: '💨 Tailwind CSS', description: 'HTML + Tailwind + JS' }
+        ];
 
-            // Create main folder
+        const selectedLibrary = await vscode.window.showQuickPick(libraryItems, {
+            placeHolder: 'Choose your library/framework',
+            canPickMany: false
+        });
+
+        if (!selectedLibrary) return;
+
+        try {
+            // Create main folder & assets/images (keeping your structure!)
             fs.mkdirSync(projectPath, { recursive: true });
-
-            // Create assets/images
             fs.mkdirSync(path.join(projectPath, 'assets', 'images'), { recursive: true });
 
-            // index.html
-            fs.writeFileSync(
-                path.join(projectPath, 'index.html'),
-`<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${projectName}</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+            // Call appropriate generator
+            let successMessage = '';
+            switch (selectedLibrary.label) {
+                case '📄 Vanilla JS':
+                    await generateVanilla(projectPath, projectName);
+                    successMessage = 'Vanilla JS project';
+                    break;
+                case '⚛️ React + Vite':
+                    await generateReact(projectPath, projectName);
+                    successMessage = 'React + Vite project';
+                    break;
+                case '🚀 Next.js':
+                    await generateNext(projectPath, projectName);
+                    successMessage = 'Next.js project';
+                    break;
+                case '🐳 Node.js + Express':
+                    await generateNode(projectPath, projectName);
+                    successMessage = 'Node.js project';
+                    break;
+                case '💨 Tailwind CSS':
+                    await generateTailwind(projectPath, projectName);
+                    successMessage = 'Tailwind project';
+                    break;
+            }
 
-<h1>Thanks for using WebInit :) </h1>
-
-<script src="script.js"></script>
-</body>
-</html>`
-            );
-
-            // style.css
-            fs.writeFileSync(
-                path.join(projectPath, 'style.css'),
-`*{
-margin: 0;
-padding:0;
-box-sizing: border-box;
-font-family: Helvetica , sans-serif;
-}
-    
-html,
-body {
-width: 100%;
-height: 100%;
-}`
-            );
-
-            // script.js
-            fs.writeFileSync(
-                path.join(projectPath, 'script.js'),
-`console.log("${projectName} started 🚀");
-alert("JS is working");`
-            );
+            vscode.window.showInformationMessage(`✅ ${successMessage} created: ${projectName}`);
             
-            vscode.window.showInformationMessage("WebInit project created successfully!");
+            // Open the project folder
+            vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(projectPath));
+            
+        } catch (error) {
+            vscode.window.showErrorMessage(`❌ Error: ${error}`);
         }
-    );
+    });
 
     context.subscriptions.push(disposable);
 }
