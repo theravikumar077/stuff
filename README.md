@@ -53,4 +53,4 @@ project-name/
 
 ---
 
-Built with ❤️ by Ravi Kumar   ye mera project hai iske liye ek mast ka logo banao jo mai apne etension k liye use kar saku mast banana bhai
+Built with ❤️ by Ravi Kumar
