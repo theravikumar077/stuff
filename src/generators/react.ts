@@ -34,11 +34,10 @@ export async function generateReact(projectPath: string, projectName: string) {
     };
 
     // 2. index.html
-    const indexHtml = `<!doctype html>
+const indexHtml = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${projectName}</title>
   </head>
@@ -112,8 +111,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 `;
 
     // 7. src/App.tsx (Your WebInit branding!)
-    const appTsx = `import { useState } from 'react'
-import reactLogo from '/vite.svg'
+const appTsx = `import { useState } from 'react'
 import './App.css'
 
 function App() {
@@ -121,30 +119,16 @@ function App() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex flex-col items-center justify-center text-white">
-        <div className="text-center">
-          <h1 className="text-5xl font-bold mb-8 animate-pulse">
+      <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex flex-col items-center justify-center text-white p-8">
+        <div className="text-center max-w-4xl mx-auto">
+          <h1 className="text-5xl font-bold mb-12 animate-pulse">
             Thanks for using WebInit 🚀
           </h1>
-          <div className="flex gap-8 items-center mb-8 flex-wrap justify-center">
-            <a href="https://vite.dev" target="_blank">
-              <img src={reactLogo} className="h-24 w-24 animate-spin" alt="Vite logo" />
-            </a>
-            <div>
-              <p className="text-2xl mb-4">React + Vite + TypeScript</p>
-              <div className="card bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl">
-                <button 
-                  className="px-6 py-3 bg-white text-purple-600 rounded-xl font-bold hover:bg-opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                  onClick={() => setCount((count) => count + 1)}
-                >
-                  count is {count}
-                </button>
-              </div>
-            </div>
+          <div className="card bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl mx-auto max-w-md">
+            <p className="mt-6 opacity-90 text-lg">
+              React + Vite + TypeScript • Ready to rock! ✨
+            </p>
           </div>
-          <p className="text-xl opacity-90">
-            Edit <code className="bg-white/20 px-3 py-1 rounded-lg font-mono">src/App.tsx</code> and save to test HMR
-          </p>
         </div>
       </div>
     </>
@@ -153,6 +137,7 @@ function App() {
 
 export default App
 `;
+
 
     // 8. src/App.css
     const appCss = `:root {
