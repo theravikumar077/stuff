@@ -116,10 +116,12 @@ export function activate(context: vscode.ExtensionContext) {
         );
 
         // Open the project folder
-        vscode.commands.executeCommand(
-          "vscode.openFolder",
-          vscode.Uri.file(projectPath),
-        );
+        // vscode.commands.executeCommand(
+        //   "vscode.openFolder",
+        //   vscode.Uri.file(projectPath),
+        //   false, // ← false = current window, true = new window
+        // );
+        
       } catch (error) {
         vscode.window.showErrorMessage(`❌ Error: ${error}`);
       }
