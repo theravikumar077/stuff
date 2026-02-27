@@ -43,7 +43,7 @@ module.exports = {
 @tailwind components;
 @tailwind utilities;`;
 
-    // 5. index.html (Your WebInit branding!)
+    // 5. index.html ( WebInit branding!)
     const indexHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
