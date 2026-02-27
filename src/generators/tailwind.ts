@@ -118,7 +118,7 @@ counterBtn?.addEventListener('click', () => {
     // Create directories
     const dirs = [
         path.join(projectPath, 'src'),
-        path.join(projectPath, 'dist'),
+        path.join(projectPath, 'dist'), 
         path.join(projectPath, 'assets', 'images')
     ];
     
