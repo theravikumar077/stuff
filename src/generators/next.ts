@@ -1,50 +1,54 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export async function generateNext(projectPath: string, projectName: string) {
-    // 1. package.json (Next.js 15 App Router + TS)
-    const packageJson = {
-        name: projectName,
-        version: "0.1.0",
-        private: true,
-        scripts: {
-            "dev": "next dev",
-            "build": "next build",
-            "start": "next start",
-            "lint": "next lint"
-        },
-        dependencies: {
-            "next": "15.0.0-canary.*",
-            "react": "^19.0.0",
-            "react-dom": "^19.0.0"
-        },
-        devDependencies: {
-            "@types/node": "^20",
-            "@types/react": "^19",
-            "@types/react-dom": "^19",
-            "eslint": "^9",
-            "eslint-config-next": "15.0.0-canary.*",
-            "postcss": "^8",
-            "tailwindcss": "^3.4.0",
-            "typescript": "^5"
-        }
-    };
-
-    // 2. next.config.mjs
-    const nextConfig = `/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    typedRoutes: true,
-  },
+export async function generateNext(projectPath: string, projectName: string, useTypeScript: boolean = true) {
+  if (useTypeScript) {
+    await generateNextTS(projectPath, projectName);
+  } else {
+    await generateNextJS(projectPath, projectName);
+  }
 }
+
+// ─── TypeScript Version ───────────────────────────────────────────────────────
+
+async function generateNextTS(projectPath: string, projectName: string) {
+  const packageJson = {
+    name: projectName,
+    version: "0.1.0",
+    private: true,
+    scripts: {
+      dev: "next dev",
+      build: "next build",
+      start: "next start",
+      lint: "next lint"
+    },
+    dependencies: {
+      next: "^15.1.0",
+      react: "^19.0.0",
+      "react-dom": "^19.0.0"
+    },
+    devDependencies: {
+  "@types/node": "^22",
+  "@types/react": "^19",
+  "@types/react-dom": "^19",
+  "eslint": "^9",
+  "eslint-config-next": "^15.1.0",
+  "postcss": "^8",
+  "autoprefixer": "^10.4.20",  // ← add this
+  "tailwindcss": "^3.4.0",
+  "typescript": "^5"
+}
+  };
+
+  const nextConfig = `/** @type {import('next').NextConfig} */
+const nextConfig = {}
 
 export default nextConfig
 `;
 
-    // 3. tsconfig.json
-    const tsConfig = `{
+  const tsConfig = `{
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "es7"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -56,22 +60,15 @@ export default nextConfig
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{ "name": "next" }],
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "paths": { "@/*": ["./src/*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }`;
 
-    // 4. tailwind.config.ts
-    const tailwindConfig = `import type { Config } from 'tailwindcss'
+  const tailwindConfig = `import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
@@ -87,8 +84,7 @@ const config: Config = {
 export default config
 `;
 
-    // 5. postcss.config.mjs
-    const postcssConfig = `export default {
+  const postcssConfig = `export default {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
@@ -96,8 +92,7 @@ export default config
 }
 `;
 
-    // 6. src/app/layout.tsx
-    const layoutTsx = `import type { Metadata } from 'next'
+  const layoutTsx = `import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -121,38 +116,25 @@ export default function RootLayout({
 }
 `;
 
-    // 7. src/app/page.tsx (Your WebInit branding!)
-    const pageTsx = `export default function Home() {
+const pageTsx = `export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex flex-col items-center justify-center text-white p-8">
-      <div className="text-center max-w-4xl mx-auto">
-        <h1 className="text-6xl font-black mb-12 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent drop-shadow-2xl">
-          Thanks for using WebInit 🚀
-        </h1>
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-8">Next.js 15 + TypeScript</h2>
-            <p className="text-xl opacity-90 mb-8 leading-relaxed">
-              App Router • Server Components • TypeScript • Tailwind CSS
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <code className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl font-mono text-lg border border-white/30">
-                npm run dev
-              </code>
-              <span className="text-2xl opacity-75">→ localhost:3000</span>
-            </div>
-          </div>
-          <div className="card bg-white/10 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/20 hover:scale-105 transition-all duration-500">
-            <div className="text-4xl font-mono bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-              Next.js 15
-            </div>
-            <div className="space-y-3 text-lg">
-              <div>✅ App Router</div>
-              <div>✅ TypeScript</div>
-              <div>✅ Tailwind CSS</div>
-              <div>✅ Server Components</div>
-            </div>
-          </div>
+    <main className="min-h-screen bg-[#0f0f11] flex items-center justify-center px-6">
+      <div className="max-w-xl w-full text-center">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-12 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-500 hover:scale-[1.02]">
+          <h1 className="text-4xl font-semibold text-white tracking-tight mb-4">
+            Thanks for using WebInit
+          </h1>
+          <p className="text-gray-400 text-base mb-8">
+            Next.js · TypeScript · Tailwind CSS
+            <br />
+            Built for speed. Designed for simplicity.
+          </p>
+          <a
+            href="https://nextjs.org/docs"
+            className="px-7 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:opacity-90 transition-all duration-300"
+          >
+            Read the Docs
+          </a>
         </div>
       </div>
     </main>
@@ -160,72 +142,156 @@ export default function RootLayout({
 }
 `;
 
-    // 8. src/app/globals.css
-    const globalsCss = `@tailwind base;
+  const globalsCss = `@tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities;`;
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
+  const gitignore = `node_modules\n.next\n.env\n.env.local\n.DS_Store\n*.log`;
+
+  fs.mkdirSync(path.join(projectPath, 'src', 'app'), { recursive: true });
+  fs.mkdirSync(path.join(projectPath, 'public'), { recursive: true });
+
+  const files: Record<string, string> = {
+    'package.json': JSON.stringify(packageJson, null, 2),
+    'next.config.mjs': nextConfig,
+    'tsconfig.json': tsConfig,
+    'tailwind.config.ts': tailwindConfig,
+    'postcss.config.mjs': postcssConfig,
+    'src/app/layout.tsx': layoutTsx,
+    'src/app/page.tsx': pageTsx,
+    'src/app/globals.css': globalsCss,
+    '.gitignore': gitignore,
+    'README.md': `# ${projectName}\n\nNext.js 15 + TypeScript + Tailwind CSS\n\n## Quick Start\n\n\`\`\`bash\nnpm install\nnpm run dev\n\`\`\`\n\nlocalhost:3000`
+  };
+
+  for (const [fileName, content] of Object.entries(files)) {
+    fs.writeFileSync(path.join(projectPath, fileName), content);
   }
-}`;
+}
 
-    // 9. next-env.d.ts
-    const nextEnvDts = `/// <reference types="next" />
-/// <reference types="next/image-types/global" />
-/// <reference types="next/navigation-types/compat/navigation.d.ts" />
+// ─── JavaScript Version ───────────────────────────────────────────────────────
 
-/** Ensure this file is included in your tsconfig.json compilerOptions.types */
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: string
-    }
-  }
+async function generateNextJS(projectPath: string, projectName: string) {
+  const packageJson = {
+    name: projectName,
+    version: "0.1.0",
+    private: true,
+    scripts: {
+      dev: "next dev",
+      build: "next build",
+      start: "next start",
+      lint: "next lint"
+    },
+    dependencies: {
+      next: "^15.1.0",
+      react: "^19.0.0",
+      "react-dom": "^19.0.0"
+    },
+    devDependencies: {
+  "eslint": "^9",
+  "eslint-config-next": "^15.1.0",
+  "postcss": "^8",
+  "autoprefixer": "^10.4.20",
+  "tailwindcss": "^3.4.0",
+}
+  };
+
+  const nextConfig = `/** @type {import('next').NextConfig} */
+const nextConfig = {}
+
+export default nextConfig
+`;
+
+  const tailwindConfig = `/** @type {import('tailwindcss').Config} */
+const config = {
+  content: [
+    './src/pages/**/*.{js,jsx,mdx}',
+    './src/components/**/*.{js,jsx,mdx}',
+    './src/app/**/*.{js,jsx,mdx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+export default config
+`;
+
+  const postcssConfig = `export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
 }
 `;
 
-    // 10. .gitignore
-    const gitignore = `node_modules
-.next
-/dist
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.DS_Store
-*.log
+  const layoutJsx = `import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata = {
+  title: '${projectName}',
+  description: 'Generated by WebInit 🚀',
+}
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  )
+}
 `;
 
-    // Write all files
-    const files = {
-        'package.json': JSON.stringify(packageJson, null, 2),
-        'next.config.mjs': nextConfig,
-        'tsconfig.json': tsConfig,
-        'tailwind.config.ts': tailwindConfig,
-        'postcss.config.mjs': postcssConfig,
-        'next-env.d.ts': nextEnvDts,
-        'src/app/layout.tsx': layoutTsx,
-        'src/app/page.tsx': pageTsx,
-        'src/app/globals.css': globalsCss,
-        '.gitignore': gitignore,
-        'README.md': `# ${projectName}\n\nNext.js 15 + TypeScript + App Router\n\n## Quick Start\n\n\`\`\`bash\nnpm install\nnpm run dev\n\`\`\`\n\nlocalhost:3000`
-    };
-
-    // Create directory structure
-    const dirs = [
-        path.join(projectPath, 'src', 'app'),
-        path.join(projectPath, 'public', 'assets', 'images')
-    ];
-    
-    for (const dir of dirs) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
-
-    // Write all files
-    for (const [fileName, content] of Object.entries(files)) {
-        fs.writeFileSync(path.join(projectPath, fileName), content);
-    }
+const pageJsx = `export default function Home() {
+  return (
+    <main className="min-h-screen bg-[#0f0f11] flex items-center justify-center px-6">
+      <div className="max-w-xl w-full text-center">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-12 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-500 hover:scale-[1.02]">
+          <h1 className="text-4xl font-semibold text-white tracking-tight mb-4">
+            Thanks for using WebInit
+          </h1>
+          <p className="text-gray-400 text-base mb-8">
+            Next.js · JavaScript · Tailwind CSS
+            <br />
+            Built for speed. Designed for simplicity.
+          </p>
+          <a
+            href="https://nextjs.org/docs"
+            className="px-7 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:opacity-90 transition-all duration-300"
+          >
+            Read the Docs
+          </a>
+        </div>
+      </div>
+    </main>
+  )
 }
+`;
+
+  const globalsCss = `@tailwind base;
+@tailwind components;
+@tailwind utilities;`;
+
+  const gitignore = `node_modules\n.next\n.env\n.env.local\n.DS_Store\n*.log`;
+
+  fs.mkdirSync(path.join(projectPath, 'src', 'app'), { recursive: true });
+  fs.mkdirSync(path.join(projectPath, 'public'), { recursive: true });
+
+  const files: Record<string, string> = {
+    'package.json': JSON.stringify(packageJson, null, 2),
+    'next.config.mjs': nextConfig,
+    'tailwind.config.js': tailwindConfig,
+    'postcss.config.mjs': postcssConfig,
+    'src/app/layout.jsx': layoutJsx,
+    'src/app/page.jsx': pageJsx,
+    'src/app/globals.css': globalsCss,
+    '.gitignore': gitignore,
+    'README.md': `# ${projectName}\n\nNext.js 15 + JavaScript + Tailwind CSS\n\n## Quick Start\n\n\`\`\`bash\nnpm install\nnpm run dev\n\`\`\`\n\nlocalhost:3000`
+  };
+
+  for (const [fileName, content] of Object.entries(files)) {
+    fs.writeFileSync(path.join(projectPath, fileName), content);
+  }
+  }

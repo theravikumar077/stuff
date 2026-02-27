@@ -53,14 +53,24 @@ export function activate(context: vscode.ExtensionContext) {
 
       // Step 3: If React, ask JS or TS
       let useTypeScript = true;
-      if (selectedLibrary.label === "⚛️ React + Vite" || selectedLibrary.label === "🐳 Node.js + Express") {
+      if (
+        selectedLibrary.label === "⚛️ React + Vite" ||
+        selectedLibrary.label === "🐳 Node.js + Express" ||
+        selectedLibrary.label === "🚀 Next.js"
+      ) {
         const langChoice = await vscode.window.showQuickPick(
           [
             { label: "💙 TypeScript", description: "Type-Safe" },
             { label: "💛 JavaScript", description: "Plain JS, no types" },
           ],
           {
-            placeHolder: `Choose language for your ${selectedLibrary.label === "⚛️ React + Vite" ? "React" : "Node.js"} project`,
+            placeHolder: `Choose language for your ${
+              selectedLibrary.label === "⚛️ React + Vite"
+                ? "React"
+                : selectedLibrary.label === "🚀 Next.js"
+                  ? "Next.js"
+                  : "Node.js"
+            } project`,
             canPickMany: false,
           },
         );
@@ -88,8 +98,8 @@ export function activate(context: vscode.ExtensionContext) {
             successMessage = `React + Vite (${useTypeScript ? "TypeScript" : "JavaScript"}) project`;
             break;
           case "🚀 Next.js":
-            await generateNext(projectPath, projectName);
-            successMessage = "Next.js project";
+            await generateNext(projectPath, projectName, useTypeScript);
+            successMessage = `Next.js (${useTypeScript ? "TypeScript" : "JavaScript"}) project`;
             break;
           case "🐳 Node.js + Express":
             await generateNode(projectPath, projectName, useTypeScript);
