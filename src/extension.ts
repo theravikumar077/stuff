@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       const rootPath = workspaceFolders[0].uri.fsPath;
       const projectPath = path.join(rootPath, projectName);
-      
+
       // Step 2: Library selection
       const libraryItems: vscode.QuickPickItem[] = [
         {
@@ -50,25 +50,24 @@ export function activate(context: vscode.ExtensionContext) {
       });
 
       if (!selectedLibrary) return;
-      
-       // Step 3: If React, ask JS or TS
+
+      // Step 3: If React, ask JS or TS
       let useTypeScript = true;
-      if (selectedLibrary.label === "⚛️ React + Vite") {
+      if (selectedLibrary.label === "⚛️ React + Vite" || selectedLibrary.label === "🐳 Node.js + Express") {
         const langChoice = await vscode.window.showQuickPick(
           [
-            { label: "💙 TypeScript", description: "Type-Safe"},
+            { label: "💙 TypeScript", description: "Type-Safe" },
             { label: "💛 JavaScript", description: "Plain JS, no types" },
           ],
           {
-            placeHolder: "Choose language for your React project",
+            placeHolder: `Choose language for your ${selectedLibrary.label === "⚛️ React + Vite" ? "React" : "Node.js"} project`,
             canPickMany: false,
-          }
+          },
         );
 
         if (!langChoice) return;
         useTypeScript = langChoice.label === "💙 TypeScript";
       }
-
 
       try {
         // Create main folder & assets/images (keeping your structure!)
@@ -93,8 +92,8 @@ export function activate(context: vscode.ExtensionContext) {
             successMessage = "Next.js project";
             break;
           case "🐳 Node.js + Express":
-            await generateNode(projectPath, projectName);
-            successMessage = "Node.js project";
+            await generateNode(projectPath, projectName, useTypeScript);
+            successMessage = `Node.js + Express (${useTypeScript ? "TypeScript" : "JavaScript"}) project`;
             break;
           case "💨 Tailwind CSS":
             await generateTailwind(projectPath, projectName);
