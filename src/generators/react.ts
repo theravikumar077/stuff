@@ -1,40 +1,48 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export async function generateReact(projectPath: string, projectName: string) {
-    // 1. package.json (latest Vite React TS template)
-    const packageJson = {
-        name: projectName,
-        private: true,
-        version: "0.0.0",
-        type: "module",
-        scripts: {
-            dev: "vite",
-            build: "tsc -b && vite build",
-            lint: "eslint .",
-            preview: "vite preview",
-            "type-check": "tsc --noEmit"
-        },
-        dependencies: {
-            react: "^19.1.0",
-            "react-dom": "^19.1.0"
-        },
-        devDependencies: {
-            "@eslint/js": "^9.27.0",
-            "@types/react": "^19.1.5",
-            "@types/react-dom": "^19.1.5",
-            "@vitejs/plugin-react": "^4.5.0",
-            "eslint": "^9.27.0",
-            "eslint-plugin-react-hooks": "^5.2.0",
-            "eslint-plugin-react-refresh": "^0.4.20",
-            "globals": "^16.2.0",
-            "typescript": "~5.8.3",
-            "vite": "^6.3.5"
-        }
-    };
+export async function generateReact(projectPath: string, projectName: string, useTypeScript: boolean = true) {
+  if (useTypeScript) {
+    await generateReactTS(projectPath, projectName);
+  } else {
+    await generateReactJS(projectPath, projectName);
+  }
+}
 
-    // 2. index.html
-const indexHtml = `<!doctype html>
+// ─── TypeScript Version ───────────────────────────────────────────────────────
+
+async function generateReactTS(projectPath: string, projectName: string) {
+  const packageJson = {
+    name: projectName,
+    private: true,
+    version: "0.0.0",
+    type: "module",
+    scripts: {
+      dev: "vite",
+      build: "tsc -b && vite build",
+      lint: "eslint .",
+      preview: "vite preview",
+      "type-check": "tsc --noEmit"
+    },
+    dependencies: {
+      react: "^19.1.0",
+      "react-dom": "^19.1.0"
+    },
+    devDependencies: {
+      "@eslint/js": "^9.27.0",
+      "@types/react": "^19.1.5",
+      "@types/react-dom": "^19.1.5",
+      "@vitejs/plugin-react": "^4.5.0",
+      "eslint": "^9.27.0",
+      "eslint-plugin-react-hooks": "^5.2.0",
+      "eslint-plugin-react-refresh": "^0.4.20",
+      "globals": "^16.2.0",
+      "typescript": "~5.8.3",
+      "vite": "^6.3.5"
+    }
+  };
+
+  const indexHtml = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -47,22 +55,15 @@ const indexHtml = `<!doctype html>
   </body>
 </html>`;
 
-    // 3. vite.config.ts
-    const viteConfig = `import { defineConfig } from 'vite'
+  const viteConfig = `import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 3000,
-    open: true
-  }
-})
-`;
+  server: { port: 3000, open: true }
+})`;
 
-    // 4. tsconfig.json
-    const tsConfig = `{
+  const tsConfig = `{
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
@@ -84,8 +85,7 @@ export default defineConfig({
   "references": [{ "path": "./tsconfig.node.json" }]
 }`;
 
-    // 5. tsconfig.node.json
-    const tsConfigNode = `{
+  const tsConfigNode = `{
   "compilerOptions": {
     "composite": true,
     "skipLibCheck": true,
@@ -97,8 +97,7 @@ export default defineConfig({
   "include": ["vite.config.ts"]
 }`;
 
-    // 6. src/main.tsx
-    const mainTsx = `import React from 'react'
+  const mainTsx = `import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
@@ -107,101 +106,189 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-)
-`;
+)`;
 
-    // 7. src/App.tsx (Your WebInit branding!)
-const appTsx = `import { useState } from 'react'
+  const appTsx = `import { useState } from 'react'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex flex-col items-center justify-center text-white p-8">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-5xl font-bold mb-12 animate-pulse">
-            Thanks for using WebInit 🚀
+    <div className="min-h-screen bg-[#0f0f11] flex items-center justify-center px-6">
+      <div className="max-w-xl w-full text-center">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-12 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-500 hover:scale-[1.02]">
+          <h1 className="text-4xl font-semibold text-white tracking-tight mb-4">
+            Thanks for using WebInit
           </h1>
-          <div className="card bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl mx-auto max-w-md">
-            <p className="mt-6 opacity-90 text-lg">
-              React + Vite + TypeScript • Ready to rock! ✨
-            </p>
-          </div>
+          <p className="text-gray-400 text-base mb-8">
+            React · Vite · TypeScript
+            <br />
+            Built for speed. Designed for simplicity.
+          </p>
+          <button
+            className="px-7 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:opacity-90 transition-all duration-300"
+            onClick={() => setCount(c => c + 1)}
+          >
+            Count: {count}
+          </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
-export default App
-`;
+export default App`;
 
+  const appCss = `* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; font-family: Inter, system-ui, sans-serif; }`;
 
-    // 8. src/App.css
-    const appCss = `:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-.card {
-  padding: 2em;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}`;
-
-    // 9. src/index.css
-    const indexCss = `@tailwind base;
+  const indexCss = `@tailwind base;
 @tailwind components;
 @tailwind utilities;`;
 
-    // 10. .gitignore
-    const gitignore = `node_modules
-dist
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.DS_Store`;
+  const gitignore = `node_modules\ndist\n.env\n.env.local\n.DS_Store`;
 
-    // Write all files
-    const files = {
-        'package.json': JSON.stringify(packageJson, null, 2),
-        'index.html': indexHtml,
-        'vite.config.ts': viteConfig,
-        'tsconfig.json': tsConfig,
-        'tsconfig.node.json': tsConfigNode,
-        'src/main.tsx': mainTsx,
-        'src/App.tsx': appTsx,
-        'src/App.css': appCss,
-        'src/index.css': indexCss,
-        '.gitignore': gitignore,
-        'README.md': `# ${projectName}\n\nReact + Vite + TypeScript\n\n## Quick Start\n\n\`\`\`bash\nnpm install\nnpm run dev\n\`\`\``
-    };
+  fs.mkdirSync(path.join(projectPath, 'src'), { recursive: true });
+  fs.mkdirSync(path.join(projectPath, 'public', 'assets', 'images'), { recursive: true });
 
-    // Create src folder
-    fs.mkdirSync(path.join(projectPath, 'src'), { recursive: true });
+  const files: Record<string, string> = {
+    'package.json': JSON.stringify(packageJson, null, 2),
+    'index.html': indexHtml,
+    'vite.config.ts': viteConfig,
+    'tsconfig.json': tsConfig,
+    'tsconfig.node.json': tsConfigNode,
+    'src/main.tsx': mainTsx,
+    'src/App.tsx': appTsx,
+    'src/App.css': appCss,
+    'src/index.css': indexCss,
+    '.gitignore': gitignore,
+    'README.md': `# ${projectName}\n\nReact + Vite + TypeScript\n\n## Quick Start\n\n\`\`\`bash\nnpm install\nnpm run dev\n\`\`\``
+  };
 
-    // Write all files
-    for (const [fileName, content] of Object.entries(files)) {
-        fs.writeFileSync(path.join(projectPath, fileName), content);
+  for (const [fileName, content] of Object.entries(files)) {
+    fs.writeFileSync(path.join(projectPath, fileName), content);
+  }
+}
+
+// ─── JavaScript Version ───────────────────────────────────────────────────────
+
+async function generateReactJS(projectPath: string, projectName: string) {
+  const packageJson = {
+    name: projectName,
+    private: true,
+    version: "0.0.0",
+    type: "module",
+    scripts: {
+      dev: "vite",
+      build: "vite build",
+      lint: "eslint .",
+      preview: "vite preview"
+    },
+    dependencies: {
+      react: "^19.1.0",
+      "react-dom": "^19.1.0"
+    },
+    devDependencies: {
+      "@eslint/js": "^9.27.0",
+      "@vitejs/plugin-react": "^4.5.0",
+      "eslint": "^9.27.0",
+      "eslint-plugin-react-hooks": "^5.2.0",
+      "eslint-plugin-react-refresh": "^0.4.20",
+      "globals": "^16.2.0",
+      "vite": "^6.3.5"
     }
+  };
 
-    // Create your assets/images folder inside React project too
-    fs.mkdirSync(path.join(projectPath, 'public', 'assets', 'images'), { recursive: true });
+  const indexHtml = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${projectName}</title>
+  </head>
+  <body>
+    <div id="root"><!-- Thanks for using WebInit :) --></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>`;
+
+  const viteConfig = `import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: { port: 3000, open: true }
+})`;
+
+  const mainJsx = `import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)`;
+
+  const appJsx = `import { useState } from 'react'
+import './App.css'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div className="min-h-screen bg-[#0f0f11] flex items-center justify-center px-6">
+      <div className="max-w-xl w-full text-center">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-12 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-500 hover:scale-[1.02]">
+          <h1 className="text-4xl font-semibold text-white tracking-tight mb-4">
+            Thanks for using WebInit
+          </h1>
+          <p className="text-gray-400 text-base mb-8">
+            React · Vite · JavaScript
+            <br />
+            Built for speed. Designed for simplicity.
+          </p>
+          <button
+            className="px-7 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:opacity-90 transition-all duration-300"
+            onClick={() => setCount(c => c + 1)}
+          >
+            Count: {count}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default App`;
+
+  const appCss = `* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; font-family: Inter, system-ui, sans-serif; }`;
+
+  const indexCss = `@tailwind base;
+@tailwind components;
+@tailwind utilities;`;
+
+  const gitignore = `node_modules\ndist\n.env\n.env.local\n.DS_Store`;
+
+  fs.mkdirSync(path.join(projectPath, 'src'), { recursive: true });
+  fs.mkdirSync(path.join(projectPath, 'public', 'assets', 'images'), { recursive: true });
+
+  const files: Record<string, string> = {
+    'package.json': JSON.stringify(packageJson, null, 2),
+    'index.html': indexHtml,
+    'vite.config.js': viteConfig,
+    'src/main.jsx': mainJsx,
+    'src/App.jsx': appJsx,
+    'src/App.css': appCss,
+    'src/index.css': indexCss,
+    '.gitignore': gitignore,
+    'README.md': `# ${projectName}\n\nReact + Vite + JavaScript\n\n## Quick Start\n\n\`\`\`bash\nnpm install\nnpm run dev\n\`\`\``
+  };
+
+  for (const [fileName, content] of Object.entries(files)) {
+    fs.writeFileSync(path.join(projectPath, fileName), content);
+  }
 }

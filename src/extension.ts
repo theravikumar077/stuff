@@ -25,6 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       const rootPath = workspaceFolders[0].uri.fsPath;
       const projectPath = path.join(rootPath, projectName);
+      
       // Step 2: Library selection
       const libraryItems: vscode.QuickPickItem[] = [
         {
@@ -33,9 +34,9 @@ export function activate(context: vscode.ExtensionContext) {
         },
         {
           label: "⚛️ React + Vite",
-          description: "React 18 + Vite + TypeScript",
+          description: "React 18 + Vite",
         },
-        { label: "🚀 Next.js", description: "Next.js 15 + TypeScript" },
+        { label: "🚀 Next.js", description: "Next.js 15 " },
         {
           label: "🐳 Node.js + Express",
           description: "Node.js backend project",
@@ -49,6 +50,25 @@ export function activate(context: vscode.ExtensionContext) {
       });
 
       if (!selectedLibrary) return;
+      
+       // Step 3: If React, ask JS or TS
+      let useTypeScript = true;
+      if (selectedLibrary.label === "⚛️ React + Vite") {
+        const langChoice = await vscode.window.showQuickPick(
+          [
+            { label: "💙 TypeScript", description: "Type-Safe"},
+            { label: "💛 JavaScript", description: "Plain JS, no types" },
+          ],
+          {
+            placeHolder: "Choose language for your React project",
+            canPickMany: false,
+          }
+        );
+
+        if (!langChoice) return;
+        useTypeScript = langChoice.label === "💙 TypeScript";
+      }
+
 
       try {
         // Create main folder & assets/images (keeping your structure!)
@@ -65,8 +85,8 @@ export function activate(context: vscode.ExtensionContext) {
             successMessage = "Vanilla JS project";
             break;
           case "⚛️ React + Vite":
-            await generateReact(projectPath, projectName);
-            successMessage = "React + Vite project";
+            await generateReact(projectPath, projectName, useTypeScript);
+            successMessage = `React + Vite (${useTypeScript ? "TypeScript" : "JavaScript"}) project`;
             break;
           case "🚀 Next.js":
             await generateNext(projectPath, projectName);
