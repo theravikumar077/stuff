@@ -18,7 +18,7 @@ async function generateNodeTS(projectPath: string, projectName: string) {
     description: "Node.js + Express + TypeScript API",
     main: "dist/index.js",
     scripts: {
-      dev: "tsx watch src/index.ts",
+      dev: "npm i && tsx watch src/index.ts",
       build: "tsc",
       start: "node dist/index.js",
     },

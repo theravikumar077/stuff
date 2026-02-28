@@ -18,7 +18,7 @@ async function generateReactTS(projectPath: string, projectName: string) {
     version: "0.0.0",
     type: "module",
     scripts: {
-      dev: "vite",
+      dev: "npm i && vite",
       build: "tsc -b && vite build",
       lint: "eslint .",
       preview: "vite preview",
@@ -180,7 +180,7 @@ async function generateReactJS(projectPath: string, projectName: string) {
     version: "0.0.0",
     type: "module",
     scripts: {
-      dev: "vite",
+      dev: "npm i && vite",
       build: "vite build",
       lint: "eslint .",
       preview: "vite preview"

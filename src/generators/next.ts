@@ -17,7 +17,7 @@ async function generateNextTS(projectPath: string, projectName: string) {
     version: "0.1.0",
     private: true,
     scripts: {
-      dev: "next dev",
+      dev: "npm i && next dev",
       build: "next build",
       start: "next start",
       lint: "next lint"
