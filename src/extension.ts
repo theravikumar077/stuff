@@ -115,12 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
           `✅ ${successMessage} created: ${projectName}`,
         );
 
-        // Open the project folder
-        vscode.commands.executeCommand(
-          "vscode.openFolder",
-          vscode.Uri.file(projectPath),
-          false, // ← false = current window, true = new window
-        );
+    
       } catch (error) {
         vscode.window.showErrorMessage(`❌ Error: ${error}`);
       }
