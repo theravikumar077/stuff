@@ -1,21 +1,17 @@
 🚀 WebInit
 ===========================
-**WebInit**: Create a basic HTML, CSS, JS project structure instantly 🚀
+**WebInit**: Create a basic project structure instantly 🚀.
 
 📖 Description
 ================
-WebInit is a Node.js project that allows users to quickly create a basic HTML, CSS, JS project structure. The project uses the VS Code extension API to provide a seamless user experience. With WebInit, users can generate project structures for various frameworks and libraries, including Vanilla, React, Node, Next, and Tailwind.
-
-The project is designed to save time and effort for developers who want to start building their projects quickly. By providing a basic project structure, WebInit enables developers to focus on writing code and building their applications without worrying about setting up the project from scratch. The project is also highly customizable, allowing users to choose the framework and library they want to use.
-
-WebInit is built using Node.js and uses the VS Code extension API to interact with the user's workspace. The project consists of several modules, each responsible for generating a specific type of project structure. The modules are designed to be independent and can be easily extended or modified to support new frameworks and libraries.
+WebInit is a VS Code extension that lets you scaffold any frontend stack—Vanilla JS/TS, React (JS/TS), or Next.js (JS/TS)—with optional Node.js backend and Tailwind CSS, all in 2 clicks. It generates accurate folder structures and boilerplate files following real-world conventions, so you skip manual setup and jump straight into coding.
 
 ✨ Features
 ================
 The following are some of the key features of WebInit:
 * **Vanilla Project Structure**: Generate a basic HTML, CSS, JS project structure for vanilla projects
-* **React Project Structure**: Generate a project structure for React projects, including support for TypeScript
-* **Node Project Structure**: Generate a project structure for Node projects, including support for TypeScript
+* **React Project Structure**: Generate a project structure for React projects, including support for TypeScript/JavaScript
+* **Node Project Structure**: Generate a project structure for Node projects, including support for TypeScript/JavaScript
 * **Next Project Structure**: Generate a project structure for Next projects, including support for TypeScript
 * **Tailwind Project Structure**: Generate a project structure for Tailwind projects
 * **Customizable**: Allow users to choose the framework and library they want to use
