@@ -180,10 +180,10 @@ async function generateReactJS(projectPath: string, projectName: string) {
     version: "0.0.0",
     type: "module",
     scripts: {
-      dev: "vite",
-      build: "vite build",
-      lint: "eslint .",
-      preview: "vite preview"
+      dev: "npm i && vite",
+      build: "npm i && vite build",
+      lint: "npm i && eslint .",
+      preview: "npm i && vite preview"
     },
     dependencies: {
       react: "^19.1.0",

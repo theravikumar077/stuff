@@ -18,9 +18,9 @@ async function generateNodeTS(projectPath: string, projectName: string) {
     description: "Node.js + Express + TypeScript API",
     main: "dist/index.js",
     scripts: {
-      dev: "tsx watch src/index.ts",
-      build: "tsc",
-      start: "node dist/index.js",
+      dev: "npm i && tsx watch src/index.ts",
+      build: "npm i && tsc",
+      start: "npm i && node dist/index.js",
     },
     dependencies: {
       express: "^4.21.1",
@@ -133,9 +133,9 @@ async function generateNodeJS(projectPath: string, projectName: string) {
     description: "Node.js + Express API",
     main: "src/index.js",
     type: "module",
-    scripts: {
-      dev: "node --watch src/index.js",
-      start: "node src/index.js",
+   scripts: {
+      dev: "npm i && node --watch src/index.js",
+      start: "npm i && node src/index.js",
     },
     dependencies: {
       express: "^4.21.1",
