@@ -239,26 +239,73 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div className="min-h-screen bg-[#0f0f11] flex items-center justify-center px-6">
-      <div className="max-w-xl w-full text-center">
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-12 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-500 hover:scale-[1.02]">
-          <h1 className="text-4xl font-semibold text-white tracking-tight mb-4">
-            Thanks for using WebInit
+   <section className="relative min-h-screen flex items-center justify-center bg-[#0f0f14] overflow-hidden px-6">
+
+      {/* Background Glow */}
+      <div className="absolute w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-3xl top-[-200px] left-[-200px]" />
+      <div className="absolute w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-3xl bottom-[-150px] right-[-150px]" />
+
+      {/* Subtle Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+      <div className="relative z-10 max-w-7xl w-full grid md:grid-cols-2 gap-12 items-center">
+
+        {/* LEFT SIDE */}
+        <div className="space-y-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-white tracking-tight">
+            WebInit
           </h1>
-          <p className="text-gray-400 text-base mb-8">
-            React · Vite · JavaScript
-            <br />
-            Built for speed. Designed for simplicity.
+
+          <p className="text-gray-300 text-lg leading-relaxed max-w-xl">
+            Instantly generate production-ready HTML, CSS & JavaScript
+            projects — without the boilerplate.
           </p>
-          <button
-            className="px-7 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:opacity-90 transition-all duration-300"
-            onClick={() => setCount(c => c + 1)}
-          >
-            Count: {count}
-          </button>
+
+          <ul className="text-gray-400 space-y-2 text-sm">
+            <li>• Auto project structure</li>
+            <li>• Linked CSS & JS</li>
+            <li>• Assets folder ready</li>
+            <li>• Zero configuration</li>
+          </ul>
+
+          <div className="flex gap-4 pt-4">
+            <button className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 text-white hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1">
+              Install Extension
+            </button>
+
+            <button className="px-6 py-3 rounded-xl bg-transparent border border-white/20 text-gray-300 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1">
+              View on Marketplace
+            </button>
+          </div>
         </div>
+
+        {/* RIGHT SIDE GLASS CARD */}
+        <div className="flex justify-center md:justify-end">
+          <div className="relative group">
+
+            {/* Glow Border */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl blur opacity-40 group-hover:opacity-70 transition duration-500"></div>
+
+            {/* Glass Card */}
+            <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 w-[320px] text-gray-200 shadow-2xl transform transition duration-500 group-hover:-translate-y-3 group-hover:rotate-1">
+
+              <p className="text-sm text-gray-400 mb-4">project-name/</p>
+
+              <div className="text-sm space-y-1 font-mono">
+                <p>├── index.html</p>
+                <p>├── style.css</p>
+                <p>├── script.js</p>
+                <p>└── assets/</p>
+                <p className="pl-5">└── images/</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+
+    </section>
   )
 }
 
