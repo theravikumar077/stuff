@@ -17,10 +17,10 @@ async function generateNextTS(projectPath: string, projectName: string) {
     version: "0.1.0",
     private: true,
     scripts: {
-      dev: "next dev",
-      build: "next build",
-      start: "next start",
-      lint: "next lint"
+      dev: "npm i && next dev",
+      build: "npm i && next build",
+      start: "npm i && next start",
+      lint: "npm i && next lint"
     },
     dependencies: {
       next: "^15.1.0",
@@ -177,10 +177,10 @@ async function generateNextJS(projectPath: string, projectName: string) {
     version: "0.1.0",
     private: true,
     scripts: {
-      dev: "next dev",
-      build: "next build",
-      start: "next start",
-      lint: "next lint"
+      dev: "npm i && next dev",
+      build: "npm i && next build",
+      start: "npm i && next start",
+      lint: "npm i && next lint"
     },
     dependencies: {
       next: "^15.1.0",
